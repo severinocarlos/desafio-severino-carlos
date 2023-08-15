@@ -1,27 +1,67 @@
+class Menu {
+    getMenu() {
+        return  {
+                'cafe': {principalDish: true, price: 3.00},
+                'chantily': {principalDish: false, price: 1.50},
+                'suco': {principalDish: true, price: 6.20},
+                'sanduiche': {principalDish: true, price: 6.50},
+                'queijo': {principalDish: false, price: 2.00},
+                'salgado': {principalDish: true, price: 7.25},
+                'combo1': {principalDish: true, price: 9.50},
+                'combo2': {principalDish: true, price: 7.50},
+        } 
+    }
+}
+
+class Payment {
+    
+}
 class CaixaDaLanchonete {
-    // cafe	Café	R$ 3,00
-    // chantily	Chantily (extra do Café)	R$ 1,50
-    // suco	Suco Natural	R$ 6,20
-    // sanduiche	Sanduíche	R$ 6,50
-    // queijo	Queijo (extra do Sanduíche)	R$ 2,00
-    // salgado	Salgado	R$ 7,25
-    // combo1	1 Suco e 1 Sanduíche	R$ 9,50
-    // combo2	1 Café e 1 Sanduíche	R$ 7,50
-
-
 
     calcularValorDaCompra(metodoDePagamento, itens) {
-        if (this.isEmpty(itens)) {
-            return "Não há itens no carrinho de compra!"
-        }
-
         const orderList = this.getOrderList(itens)
+
+        const message = this.orderIsRight(orderList)
+
+        
 
 
         return "";
     }
+    
+    orderIsRight(paymentMethod, items) {
+        if (this.cartIsEmpty(items)) {
+            return "Não há itens no carrinho de compra!"
+        } else if (!this.itemExist(items)) {
+            return "Item inválido!"
+        } else if (!(this.quantityIsValid(items))) {
+            return "Quantidade inválida!"
+        } else if (!(this.IsFormOfPayment(paymentMethod))) {
+            return "Forma de pagamento inválida!"
+        }
+    }
 
-    isEmpty(items) {
+    IsFormOfPayment(paymentMethod) {
+        return paymentMethod == "dinheiro" || paymentMethod == "debito" || paymentMethod == "credito"
+    }
+
+    quantityIsValid(items) {
+        items.forEach(item => {
+            if (item.quantity == 0) return item.quantity
+            
+        });
+    }
+
+    itemExist(items) {
+        items.forEach(item => {
+            const menu = new Menu().getMenu()
+            if (!menu[item.order]) {
+                return false
+            }
+        })
+    }
+    
+    cartIsEmpty(items) {
         return items.lenght == 0
     }
 
@@ -33,5 +73,5 @@ class CaixaDaLanchonete {
     }
 
 }
-
+console.log(new CaixaDaLanchonete().calcularValorDaCompra('debito', ['cafe,1','chantily,1']))
 export { CaixaDaLanchonete };
